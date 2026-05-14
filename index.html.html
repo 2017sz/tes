@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>泉州·泰康 520专属祝福</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "微软雅黑", system-ui, sans-serif;
+            overflow: hidden;
+            min-height: 100vh;
+        }
+        .page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #8B2E66, #C74B8A, #6A48B8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: opacity 0.8s ease;
+        }
+        .hide-page {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(18px);
+            border-radius: 30px;
+            padding: 50px 30px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 0 60px rgba(255,120,170,0.4);
+            animation: breathe 4s ease-in-out infinite;
+        }
+        @keyframes breathe {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .big-heart {
+            font-size: 70px;
+            margin-bottom: 20px;
+            animation: beat 1s infinite alternate;
+        }
+        @keyframes beat {
+            from { transform: scale(1); }
+            to { transform: scale(1.18); }
+        }
+        .main-title {
+            font-size: 24px;
+            color: #fff;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+        .sub-title {
+            font-size: 15px;
+            color: #ffd6e5;
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            background: rgba(255,255,255,0.92);
+            color: #9c2c5e;
+            margin-bottom: 25px;
+        }
+        button {
+            padding: 15px 50px;
+            border: none;
+            border-radius: 50px;
+            background: #fff;
+            color: #9c2c5e;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #9c2c5e;
+            color: #fff;
+            transform: scale(1.06);
+        }
+        .bless-text {
+            font-size: 18px;
+            color: #fff;
+            line-height: 2.2;
+            padding: 20px 15px;
+        }
+        .heart-fall, .petal, .star, .light {
+            position: fixed;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .heart-fall {
+            top: -10%;
+            color: #fff;
+            opacity: 0.75;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity:1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity:0; }
+        }
+        .petal {
+            top: -10%;
+            color: #ffc8dd;
+            animation: petalFall linear infinite;
+        }
+        @keyframes petalFall {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity:1; }
+            100% { transform: translateY(100vh) translateX(80px) rotate(180deg); opacity:0; }
+        }
+        .star {
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 2.5s infinite;
+        }
+        @keyframes twinkle {
+            0%,100% { opacity:0; }
+            50% { opacity:1; }
+        }
+        .light {
+            background: #ffe8a3;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%,100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-30px) translateX(20px); }
+        }
+    </style>
+</head>
+<body>
+<div class="page" id="page1">
+    <div class="card">
+        <div class="big-heart">❤️</div>
+        <div class="main-title">泉州 · 泰康</div>
+        <div class="sub-title">520专属浪漫祝福</div>
+        <input type="text" id="userName" placeholder="请输入你的名字">
+        <button onclick="goBless()">开启专属祝福</button>
+    </div>
+</div>
+<div class="page hide-page" id="page2">
+    <div class="card">
+        <div class="big-heart">💖</div>
+        <div class="main-title">520专属寄语</div>
+        <div class="bless-text" id="blessContent"></div>
+    </div>
+</div>
+<script>
+const blessList = [
+    "身在泉州古城，心拥泰康安稳，520愿你岁岁平安，日日皆有温柔相伴。",
+    "海风漫过泉州湾，爱意藏进520，泰康一路相守，往后余生皆是喜乐无忧。",
+    "一城泉州烟火，一生泰康温情，愿你被时光偏爱，被浪漫温柔以待。",
+    "漫步泉州街巷，珍藏人间美好，泰康护航朝夕，520万事顺意满心欢喜。",
+    "以泉州为故里，以泰康为心安，520风月皆温柔，岁岁年年皆圆满。",
+    "泉州藏山海，泰康护流年，520愿所有美好如期而至，所有温柔为你而来。",
+    "古城寄深情，泰康伴余生，520不负遇见，不负韶华，不负每一份热爱。",
+    "人间烟火落泉州，岁月安稳靠泰康，愿你520常欢愉，年年皆胜意。",
+    "看泉州山海烂漫，有泰康温暖相伴，往后三餐四季，温柔与浪漫永不缺席。",
+    "泉州有风，人间有爱，泰康暖心相守，520愿你平安顺遂，一生被善待。"
+];
+function goBless() {
+    let name = document.getElementById('userName').value.trim();
+    if (!name) {
+        alert("请先输入你的名字，再开启专属祝福哦～");
+        return;
+    }
+    let ran = Math.floor(Math.random() * blessList.length);
+    document.getElementById('blessContent').innerText = `${name}，${blessList[ran]}`;
+    document.getElementById('page1').classList.add('hide-page');
+    document.getElementById('page2').classList.remove('hide-page');
+}
+function createHeart(){let el=document.createElement('div');el.className='heart-fall';let icon=['❤️','💖','💗','💕','💘'];el.innerHTML=icon[Math.floor(Math.random()*icon.length)];el.style.left=Math.random()*100+'vw';el.style.fontSize=Math.random()*24+12+'px';el.style.animationDuration=Math.random()*5+2+'s';document.body.appendChild(el);setTimeout(()=>el.remove(),7000);}
+setInterval(createHeart,180);
+function createPetal(){let el=document.createElement('div');el.className='petal';el.innerHTML='🌸';el.style.left=Math.random()*100+'vw';el.style.fontSize=Math.random()*20+10+'px';el.style.animationDuration=Math.random()*6+3+'s';document.body.appendChild(el);setTimeout(()=>el.remove(),8000);}
+setInterval(createPetal,220);
+function createStar(){let el=document.createElement('div');el.className='star';el.style.left=Math.random()*100+'vw';el.style.top=Math.random()*100+'vh';el.style.width=Math.random()*4+2+'px';el.style.height=el.style.width;el.style.animationDelay=Math.random()*2+'s';document.body.appendChild(el);setTimeout(()=>el.remove(),4000);}
+setInterval(createStar,120);
+function createLight(){let el=document.createElement('div');el.className='light';el.style.left=Math.random()*100+'vw';el.style.top=Math.random()*100+'vh';el.style.width=Math.random()*8+4+'px';el.style.height=el.style.width;document.body.appendChild(el);setTimeout(()=>el.remove(),6000);}
+setInterval(createLight,250);
+</script>
+</body>
+</html>
